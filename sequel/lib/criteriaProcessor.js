@@ -481,7 +481,7 @@ CriteriaProcessor.prototype.processSimple = function processSimple (tableName, p
   }
 
   if (_.isString(value)) {
-    value = '"' + utils.escapeString(value) +'"';
+    value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
   }
 
   this.queryString += parent + ' ' + combinator + ' ' + value;
