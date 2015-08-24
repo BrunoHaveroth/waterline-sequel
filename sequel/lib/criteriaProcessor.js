@@ -44,6 +44,8 @@ var CriteriaProcessor = module.exports = function CriteriaProcessor(currentTable
   this.parameterized = true;
   this.caseSensitive = true;
   this.escapeCharacter = '"';
+  this.stringValueEscapeChar = '"';
+  this.limitKeyword = 'LIMIT';
   this.wlNext = {};
 
   if(options && utils.object.hasOwnProperty(options, 'parameterized')) {
@@ -60,6 +62,14 @@ var CriteriaProcessor = module.exports = function CriteriaProcessor(currentTable
 
   if(options && utils.object.hasOwnProperty(options, 'paramCount')) {
     this.paramCount = options.paramCount;
+  }
+
+  if(options && utils.object.hasOwnProperty(options, 'stringValueEscapeChar')) {
+    this.stringValueEscapeChar = options.stringValueEscapeChar;
+  }
+
+  if(options && utils.object.hasOwnProperty(options, 'limitKeyword')) {
+    this.limitKeyword = options.limitKeyword;
   }
 
   if(options && utils.object.hasOwnProperty(options, 'wlNext')) {
@@ -345,7 +355,7 @@ CriteriaProcessor.prototype._in = function _in(key, val) {
     }
     else {
       if(_.isString(value)) {
-        value = '"' + utils.escapeString(value) + '"';
+        value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
       }
 
       self.queryString += value + ',';
@@ -819,10 +829,10 @@ CriteriaProcessor.prototype.limit = function(options) {
   // Some MySQL hackery here.  For details, see:
   // http://stackoverflow.com/questions/255517/mysql-offset-infinite-rows
   if(options === null || options === undefined) {
-    this.queryString += ' LIMIT 184467440737095516 ';
+    this.queryString += ' ' + this.limitKeyword + ' 184467440737095516 ';
   }
   else {
-    this.queryString += ' LIMIT ' + options;
+    this.queryString += ' ' + this.limitKeyword + ' ' + options;
   }
 };
 
