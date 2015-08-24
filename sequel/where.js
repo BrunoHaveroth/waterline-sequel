@@ -64,6 +64,14 @@ var WhereBuilder = module.exports = function WhereBuilder(schema, currentTable, 
     this.escapeCharacter = options.escapeCharacter;
   }
 
+  if(options && hop(options, 'stringValueEscapeChar')) {
+    this.stringValueEscapeChar = options.stringValueEscapeChar;
+  }
+
+  if(options && hop(options, 'limitKeyword')) {
+    this.limitKeyword = options.limitKeyword;
+  }
+
   // Add support for WL Next features
   if(options && hop(options, 'wlNext')) {
     this.wlNext = options.wlNext;
@@ -143,6 +151,8 @@ WhereBuilder.prototype.single = function single(queryObject, options) {
     parameterized: this.parameterized,
     caseSensitive: this.caseSensitive,
     escapeCharacter: this.escapeCharacter,
+    stringValueEscapeChar: this.stringValueEscapeChar,
+    limitKeyword: this.limitKeyword,
     wlNext: this.wlNext
   }, options);
 
@@ -208,6 +218,8 @@ WhereBuilder.prototype.complex = function complex(queryObject, options) {
         parameterized: self.parameterized,
         caseSensitive: self.caseSensitive,
         escapeCharacter: self.escapeCharacter,
+        stringValueEscapeChar: self.stringValueEscapeChar,
+        limitKeyword: self.limitKeyword,
         wlNext: self.wlNext
       }, options);
 
@@ -265,6 +277,8 @@ WhereBuilder.prototype.complex = function complex(queryObject, options) {
         parameterized: self.parameterized,
         caseSensitive: self.caseSensitive,
         escapeCharacter: self.escapeCharacter,
+        stringValueEscapeChar: self.stringValueEscapeChar,
+        limitKeyword: self.limitKeyword,
         wlNext: self.wlNext
       }, options);
 

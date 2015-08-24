@@ -50,6 +50,9 @@ var Sequel = module.exports = function(schema, options) {
   // MySQL and Oracle require this, but it doesn't work in Postgresql.
   this.declareDeleteAlias = options && utils.object.hasOwnProperty(options, 'declareDeleteAlias') ? options.declareDeleteAlias : true;
 
+  this.stringValueEscapeChar = options && utils.object.hasOwnProperty(options, 'stringValueEscapeChar') ? options.stringValueEscapeChar : '"';
+  this.limitKeyword = options && utils.object.hasOwnProperty(options, 'limitKeyword') ? options.limitKeyword : 'LIMIT';
+
   // Waterline NEXT
   // These are flags that can be toggled today and expose future features. If any of the following are turned
   // on the adapter tests will probably not pass. If you toggle these know what you are getting into.
@@ -287,6 +290,8 @@ Sequel.prototype.simpleWhere = function simpleWhere(currentTable, queryObject, o
     parameterized: this.parameterized,
     caseSensitive: this.caseSensitive,
     escapeCharacter: this.escapeCharacter,
+    stringValueEscapeChar: this.stringValueEscapeChar,
+    limitKeyword: this.limitKeyword,
     wlNext: this.wlNext
   };
 
@@ -298,6 +303,8 @@ Sequel.prototype.complexWhere = function complexWhere(currentTable, queryObject,
   var _options = {
     parameterized: this.parameterized,
     caseSensitive: this.caseSensitive,
+    stringValueEscapeChar: this.stringValueEscapeChar,
+    limitKeyword: this.limitKeyword,
     escapeCharacter: this.escapeCharacter
   };
 
