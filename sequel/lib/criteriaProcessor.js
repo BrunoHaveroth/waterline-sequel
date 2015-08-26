@@ -590,7 +590,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
       ('00' + value.getMinutes()).slice(-2) + ':' +
       ('00' + value.getSeconds()).slice(-2);
 
-    value = '"' + value + '"';
+    value = this.stringValueEscapeChar + value + this.stringValueEscapeChar;
     escapedDate = true;
   }
 
@@ -605,7 +605,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
       }
       else {
         if(_.isString(value) && !escapedDate) {
-          value = '"' + utils.escapeString(value) + '"';
+          value = this.stringValueEscapeChar + utils.escapeString(value) + this.stringValueEscapeChar;
         }
         str = '< ' + value;
       }
@@ -621,7 +621,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
       }
       else {
         if(_.isString(value) && !escapedDate) {
-          value = '"' + utils.escapeString(value) + '"';
+          value = this.stringValueEscapeChar + utils.escapeString(value) + this.stringValueEscapeChar;
         }
         str = '<= ' + value;
       }
@@ -637,7 +637,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
       }
       else {
         if(_.isString(value) && !escapedDate) {
-          value = '"' + utils.escapeString(value) + '"';
+          value = this.stringValueEscapeChar + utils.escapeString(value) + this.stringValueEscapeChar;
         }
         str = '> ' + value;
       }
@@ -653,7 +653,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
       }
       else {
         if(_.isString(value) && !escapedDate) {
-          value = '"' + utils.escapeString(value) + '"';
+          value = this.stringValueEscapeChar + utils.escapeString(value) + this.stringValueEscapeChar;
         }
         str = '>= ' + value;
       }
@@ -689,7 +689,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
             value.forEach(function(val) {
 
               if(_.isString(val)) {
-                val = '"' + utils.escapeString(val) + '"';
+                val = this.stringValueEscapeChar + utils.escapeString(val) + this.stringValueEscapeChar;
               }
 
               str += val + ',';
@@ -707,7 +707,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
           }
           else {
             if(_.isString(value)) {
-              value = '"' + utils.escapeString(value) + '"';
+              value = this.stringValueEscapeChar + utils.escapeString(value) + this.stringValueEscapeChar;
             }
 
             str = '<> ' + value;
