@@ -122,7 +122,7 @@ Sequel.prototype.count = function count(currentTable, queryObject) {
 
   // Step 1:
   // Build out the Count statements
-  this.queries = ['SELECT COUNT(*) as count FROM '];
+  this.queries = ['SELECT COUNT(*) as "count" FROM '];
 
   var subQuery = 'SELECT * FROM ' + tableName;
 
