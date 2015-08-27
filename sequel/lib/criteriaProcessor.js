@@ -827,12 +827,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
  */
 
 CriteriaProcessor.prototype.limit = function(options) {
-  // Some MySQL hackery here.  For details, see:
-  // http://stackoverflow.com/questions/255517/mysql-offset-infinite-rows
-  if(options === null || options === undefined) {
-    this.queryString += ' ' + this.limitKeyword + ' 184467440737095516 ';
-  }
-  else {
+  if(options) {
     this.queryString += ' ' + this.limitKeyword + ' ' + options;
   }
 };
