@@ -581,7 +581,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
   if(_.isDate(value)) {
     value = utils.toSqlDate(value);
 
-    value = this.stringValueEscapeChar + value + this.stringValueEscapeChar;
+    value = self.stringValueEscapeChar + value + self.stringValueEscapeChar;
     escapedDate = true;
   }
 
@@ -596,7 +596,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
       }
       else {
         if(_.isString(value) && !escapedDate) {
-          value = this.stringValueEscapeChar + utils.escapeString(value) + this.stringValueEscapeChar;
+          value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
         }
         str = '< ' + value;
       }
@@ -612,7 +612,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
       }
       else {
         if(_.isString(value) && !escapedDate) {
-          value = this.stringValueEscapeChar + utils.escapeString(value) + this.stringValueEscapeChar;
+          value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
         }
         str = '<= ' + value;
       }
@@ -628,7 +628,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
       }
       else {
         if(_.isString(value) && !escapedDate) {
-          value = this.stringValueEscapeChar + utils.escapeString(value) + this.stringValueEscapeChar;
+          value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
         }
         str = '> ' + value;
       }
@@ -644,7 +644,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
       }
       else {
         if(_.isString(value) && !escapedDate) {
-          value = this.stringValueEscapeChar + utils.escapeString(value) + this.stringValueEscapeChar;
+          value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
         }
         str = '>= ' + value;
       }
@@ -680,7 +680,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
             value.forEach(function(val) {
 
               if(_.isString(val)) {
-                val = this.stringValueEscapeChar + utils.escapeString(val) + this.stringValueEscapeChar;
+                val = self.stringValueEscapeChar + utils.escapeString(val) + self.stringValueEscapeChar;
               }
 
               str += val + ',';
@@ -698,7 +698,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
           }
           else {
             if(_.isString(value)) {
-              value = this.stringValueEscapeChar + utils.escapeString(value) + this.stringValueEscapeChar;
+              value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
             }
 
             str = '<> ' + value;
@@ -730,7 +730,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
         str = comparator + ' ' + '$' + this.paramCount;
       }
       else {
-        str = comparator + ' ' + utils.escapeName(value, this.stringValueEscapeChar);
+        str = comparator + ' ' + utils.escapeName(value, self.stringValueEscapeChar);
       }
 
       break;
@@ -757,7 +757,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
         str = comparator + ' ' + '$' + this.paramCount;
       }
       else {
-        str = comparator + ' ' + utils.escapeName('%' + value + '%', this.stringValueEscapeChar);
+        str = comparator + ' ' + utils.escapeName('%' + value + '%', self.stringValueEscapeChar);
       }
 
       break;
@@ -783,7 +783,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
         str = comparator + ' ' + '$' + this.paramCount;
       }
       else {
-        str = comparator + ' ' + utils.escapeName(value + '%', this.stringValueEscapeChar);
+        str = comparator + ' ' + utils.escapeName(value + '%', self.stringValueEscapeChar);
       }
 
       break;
@@ -809,7 +809,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
         str = comparator + ' ' + '$' + this.paramCount;
       }
       else {
-        str = comparator + ' ' + utils.escapeName('%' + value, this.stringValueEscapeChar);
+        str = comparator + ' ' + utils.escapeName('%' + value, self.stringValueEscapeChar);
       }
 
       break;
