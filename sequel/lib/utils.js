@@ -164,6 +164,17 @@ utils.escapeString = function(value) {
  * and then converted to local time on the client.
  */
 
-utils.toSqlDate = function(date) {
-  return date.toUTCString();
+utils.toSqlDate = function toSqlDate(date) {
+  var d = date.getFullYear() + '-' +
+          ('00' + (date.getMonth() + 1)).slice(-2) + '-' +
+          ('00' + date.getDate()).slice(-2),
+      t = ('00' + date.getHours()).slice(-2) + ':' +
+          ('00' + date.getMinutes()).slice(-2) + ':' +
+          ('00' + date.getSeconds()).slice(-2);
+
+  if (t === '00:00:00') {
+    return d
+  } else {
+    return d + ' ' + t;
+  }
 };

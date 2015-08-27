@@ -473,12 +473,7 @@ CriteriaProcessor.prototype.processSimple = function processSimple (tableName, p
   }
 
   if(_.isDate(value)) {
-    value = value.getFullYear() + '-' +
-    ('00' + (value.getMonth()+1)).slice(-2) + '-' +
-    ('00' + value.getDate()).slice(-2) + ' ' +
-    ('00' + value.getHours()).slice(-2) + ':' +
-    ('00' + value.getMinutes()).slice(-2) + ':' +
-    ('00' + value.getSeconds()).slice(-2);
+    value = utils.toSqlDate(value);
   }
 
   if (_.isString(value)) {
@@ -584,12 +579,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
 
   // Check value for a date type
   if(_.isDate(value)) {
-    value = value.getFullYear() + '-' +
-      ('00' + (value.getMonth()+1)).slice(-2) + '-' +
-      ('00' + value.getDate()).slice(-2) + ' ' +
-      ('00' + value.getHours()).slice(-2) + ':' +
-      ('00' + value.getMinutes()).slice(-2) + ':' +
-      ('00' + value.getSeconds()).slice(-2);
+    value = utils.toSqlDate(value);
 
     value = this.stringValueEscapeChar + value + this.stringValueEscapeChar;
     escapedDate = true;
