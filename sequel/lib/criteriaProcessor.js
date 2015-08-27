@@ -232,6 +232,8 @@ CriteriaProcessor.prototype.like = function like(val) {
     }
 
     var comparator = self.caseSensitive ? 'ILIKE' : 'LIKE';
+    comparator = 'LIKE';
+    value = value.toLowerCase();
 
     // Override comparator with WL Next features
     if(hop(self.wlNext, 'caseSensitive') && self.wlNext.caseSensitive) {
@@ -721,6 +723,9 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
 
       if(this.caseSensitive) {
         comparator = 'ILIKE';
+
+        comparator = 'LIKE';
+        value = value.toLowerCase();
       }
       else {
         comparator = 'LIKE';
@@ -745,6 +750,9 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
 
       if(this.caseSensitive) {
         comparator = 'ILIKE';
+
+        comparator = 'LIKE';
+        value = value.toLowerCase();
       }
       else {
         comparator = 'LIKE';
@@ -769,6 +777,8 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
 
       if(this.caseSensitive) {
         comparator = 'ILIKE';
+        comparator = 'LIKE';
+        value = value.toLowerCase();
       }
       else {
         comparator = 'LIKE';
@@ -793,6 +803,8 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
 
       if(this.caseSensitive) {
         comparator = 'ILIKE';
+        comparator = 'LIKE';
+        value = value.toLowerCase();
       }
       else {
         comparator = 'LIKE';
@@ -851,7 +863,7 @@ CriteriaProcessor.prototype.skip = function(options) {
 CriteriaProcessor.prototype.sort = function(options) {
   var keys = Object.keys(options);
   if (!keys.length) { return; }
-  
+
   var self = this;
   this.queryString += ' ORDER BY ';
 
