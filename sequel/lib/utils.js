@@ -114,12 +114,12 @@ utils.prepareValue = function(value) {
 
   // Cast dates to SQL
   if (_.isDate(value)) {
-    value = utils.toSqlDate(value);
+    return utils.toSqlDate(value);
   }
 
   // Cast functions to strings
   if (_.isFunction(value)) {
-    value = value.toString();
+    return value.toString();
   }
 
   // Store Arrays as strings

@@ -44,7 +44,7 @@ var CriteriaProcessor = module.exports = function CriteriaProcessor(currentTable
   this.parameterized = true;
   this.caseSensitive = true;
   this.escapeCharacter = '"';
-  this.stringValueEscapeChar = '"';
+  this.escapeValue = '"';
   this.limitKeyword = 'LIMIT';
   this.wlNext = {};
 
@@ -64,8 +64,8 @@ var CriteriaProcessor = module.exports = function CriteriaProcessor(currentTable
     this.paramCount = options.paramCount;
   }
 
-  if(options && utils.object.hasOwnProperty(options, 'stringValueEscapeChar')) {
-    this.stringValueEscapeChar = options.stringValueEscapeChar;
+  if(options && utils.object.hasOwnProperty(options, 'escapeValue')) {
+    this.escapeValue = options.escapeValue;
   }
 
   if(options && utils.object.hasOwnProperty(options, 'limitKeyword')) {
@@ -356,7 +356,7 @@ CriteriaProcessor.prototype._in = function _in(key, val) {
     }
     else {
       if(_.isString(value)) {
-        value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
+        value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
       }
 
       self.queryString += value + ',';
@@ -477,7 +477,7 @@ CriteriaProcessor.prototype.processSimple = function processSimple (tableName, p
   }
 
   if (_.isString(value)) {
-    value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
+    value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
   }
 
   this.queryString += parent + ' ' + combinator + ' ' + value;
@@ -581,7 +581,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
   if(_.isDate(value)) {
     value = utils.toSqlDate(value);
 
-    value = self.stringValueEscapeChar + value + self.stringValueEscapeChar;
+    value = self.escapeValue + value + self.escapeValue;
     escapedDate = true;
   }
 
@@ -596,7 +596,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
       }
       else {
         if(_.isString(value) && !escapedDate) {
-          value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
+          value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
         }
         str = '< ' + value;
       }
@@ -612,7 +612,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
       }
       else {
         if(_.isString(value) && !escapedDate) {
-          value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
+          value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
         }
         str = '<= ' + value;
       }
@@ -628,7 +628,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
       }
       else {
         if(_.isString(value) && !escapedDate) {
-          value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
+          value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
         }
         str = '> ' + value;
       }
@@ -644,7 +644,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
       }
       else {
         if(_.isString(value) && !escapedDate) {
-          value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
+          value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
         }
         str = '>= ' + value;
       }
@@ -680,7 +680,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
             value.forEach(function(val) {
 
               if(_.isString(val)) {
-                val = self.stringValueEscapeChar + utils.escapeString(val) + self.stringValueEscapeChar;
+                val = self.escapeValue + utils.escapeString(val) + self.escapeValue;
               }
 
               str += val + ',';
@@ -698,7 +698,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
           }
           else {
             if(_.isString(value)) {
-              value = self.stringValueEscapeChar + utils.escapeString(value) + self.stringValueEscapeChar;
+              value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
             }
 
             str = '<> ' + value;
@@ -730,7 +730,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
         str = comparator + ' ' + '$' + this.paramCount;
       }
       else {
-        str = comparator + ' ' + utils.escapeName(value, self.stringValueEscapeChar);
+        str = comparator + ' ' + utils.escapeName(value, self.escapeValue);
       }
 
       break;
@@ -757,7 +757,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
         str = comparator + ' ' + '$' + this.paramCount;
       }
       else {
-        str = comparator + ' ' + utils.escapeName('%' + value + '%', self.stringValueEscapeChar);
+        str = comparator + ' ' + utils.escapeName('%' + value + '%', self.escapeValue);
       }
 
       break;
@@ -783,7 +783,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
         str = comparator + ' ' + '$' + this.paramCount;
       }
       else {
-        str = comparator + ' ' + utils.escapeName(value + '%', self.stringValueEscapeChar);
+        str = comparator + ' ' + utils.escapeName(value + '%', self.escapeValue);
       }
 
       break;
@@ -809,7 +809,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
         str = comparator + ' ' + '$' + this.paramCount;
       }
       else {
-        str = comparator + ' ' + utils.escapeName('%' + value, self.stringValueEscapeChar);
+        str = comparator + ' ' + utils.escapeName('%' + value, self.escapeValue);
       }
 
       break;

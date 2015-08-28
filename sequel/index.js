@@ -50,7 +50,7 @@ var Sequel = module.exports = function(schema, options) {
   // MySQL and Oracle require this, but it doesn't work in Postgresql.
   this.declareDeleteAlias = options && utils.object.hasOwnProperty(options, 'declareDeleteAlias') ? options.declareDeleteAlias : true;
 
-  this.stringValueEscapeChar = options && utils.object.hasOwnProperty(options, 'stringValueEscapeChar') ? options.stringValueEscapeChar : '"';
+  this.escapeValue = options && utils.object.hasOwnProperty(options, 'escapeValue') ? options.escapeValue : '"';
   this.limitKeyword = options && utils.object.hasOwnProperty(options, 'limitKeyword') ? options.limitKeyword : 'LIMIT';
 
   // Waterline NEXT
@@ -290,7 +290,7 @@ Sequel.prototype.simpleWhere = function simpleWhere(currentTable, queryObject, o
     parameterized: this.parameterized,
     caseSensitive: this.caseSensitive,
     escapeCharacter: this.escapeCharacter,
-    stringValueEscapeChar: this.stringValueEscapeChar,
+    escapeValue: this.escapeValue,
     limitKeyword: this.limitKeyword,
     wlNext: this.wlNext
   };
@@ -303,7 +303,7 @@ Sequel.prototype.complexWhere = function complexWhere(currentTable, queryObject,
   var _options = {
     parameterized: this.parameterized,
     caseSensitive: this.caseSensitive,
-    stringValueEscapeChar: this.stringValueEscapeChar,
+    escapeValue: this.escapeValue,
     limitKeyword: this.limitKeyword,
     escapeCharacter: this.escapeCharacter
   };
