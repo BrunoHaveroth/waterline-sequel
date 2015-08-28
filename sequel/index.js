@@ -163,10 +163,12 @@ Sequel.prototype.count = function count(currentTable, queryObject) {
 
 Sequel.prototype.create = function create(currentTable, data) {
 
-  var options = {
+  var self = this,
+      options = {
     parameterized: this.parameterized,
     escapeCharacter: this.escapeCharacter,
-    escapeInserts: this.escapeInserts
+    escapeInserts: this.escapeInserts,
+    escapeValue: this.escapeValue
   };
 
   // Transform the Data object into arrays used in a parameterized query
@@ -193,7 +195,8 @@ Sequel.prototype.update = function update(currentTable, queryObject, data) {
   var options = {
     parameterized: this.parameterized,
     escapeCharacter: this.escapeCharacter,
-    escapeInserts: this.escapeInserts
+    escapeInserts: this.escapeInserts,
+    escapeValue: this.escapeValue
   };
 
   // Get the attribute identity (as opposed to the table name)

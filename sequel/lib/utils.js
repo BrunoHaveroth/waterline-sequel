@@ -77,11 +77,18 @@ utils.mapAttributes = function(data, options) {
   // Determine if we should escape the inserted characters
   var escapeInserts = options && utils.object.hasOwnProperty(options, 'escapeInserts') ? options.escapeInserts : false;
 
+  // Determine if we should escape the inserted characters
+  var escapeValue = options && utils.object.hasOwnProperty(options, 'escapeValue') ? options.escapeValue : false;
+
   Object.keys(data).forEach(function(key) {
-    var k = escapeInserts ? (options.escapeCharacter + key + options.escapeCharacter) : key;
+    var k = options.escapeCharacter + key + options.escapeCharacter;
     keys.push(k);
 
     var value = utils.prepareValue(data[key]);
+
+    if (_.isString(value)) {
+      value = utils.escapeString(value, escapeValue);
+    }
 
     values.push(value);
 
@@ -117,19 +124,23 @@ utils.prepareValue = function(value) {
     return utils.toSqlDate(value);
   }
 
-  // Cast functions to strings
-  if (_.isFunction(value)) {
-    return value.toString();
-  }
-
-  // Store Arrays as strings
-  if (Array.isArray(value)) {
-    value = JSON.stringify(value);
+  if (_.isBoolean(value)) {
+    return value ? 1 : 0
   }
 
   // Store Buffers as hex strings (for BYTEA)
   if (Buffer.isBuffer(value)) {
     value = "x'" + value.toString('hex') + "'";
+  }
+
+  // Store Array and Objects as strings
+  if (_.isObject(value)) {
+    value = JSON.stringify(value);
+  }
+
+  // Cast functions to strings
+  if (_.isFunction(value)) {
+    return value.toString();
   }
 
   return value;
@@ -143,9 +154,9 @@ utils.escapeString = function(value, escapeCharacter) {
   if(!_.isString(value)) return value;
 
   // is it a hex string?
-  if (value.substring(0,2) === "x'") return value;
+  if (value && value.substring(0,2) === "x'") return value;
 
-  value = value.replace(/[\0\n\r\b\t\\\'\"\x1a]/g, function(s) {
+  value = value.replace(/[\0\n\r\b\t\\\'\x1a]/g, function(s) {
     switch(s) {
       case "\0": return "\\0";
       case "\n": return "\\n";
