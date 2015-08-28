@@ -129,7 +129,7 @@ utils.prepareValue = function(value) {
 
   // Store Buffers as hex strings (for BYTEA)
   if (Buffer.isBuffer(value)) {
-    value = '\\x' + value.toString('hex');
+    value = "x'" + value.toString('hex') + "'";
   }
 
   return value;
@@ -139,8 +139,11 @@ utils.prepareValue = function(value) {
  * Escape Strings
  */
 
-utils.escapeString = function(value) {
+utils.escapeString = function(value, escapeCharacter) {
   if(!_.isString(value)) return value;
+
+  // is it a hex string?
+  if (value.substring(0,2) === "x'") return value;
 
   value = value.replace(/[\0\n\r\b\t\\\'\"\x1a]/g, function(s) {
     switch(s) {
@@ -154,7 +157,11 @@ utils.escapeString = function(value) {
     }
   });
 
-  return value;
+  if (escapeCharacter) {
+    return escapeCharacter + value + escapeCharacter;
+  } else {
+    return value;
+  }
 };
 
 /**

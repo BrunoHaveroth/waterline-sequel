@@ -231,13 +231,7 @@ CriteriaProcessor.prototype.like = function like(val) {
       caseSensitive = false;
     }
 
-    var comparator = self.caseSensitive ? 'ILIKE' : 'LIKE';
-    comparator = 'LIKE';
-
-    // Override comparator with WL Next features
-    if(hop(self.wlNext, 'caseSensitive') && self.wlNext.caseSensitive) {
-      comparator = 'LIKE';
-    }
+    var comparator = 'LIKE';
 
     self.process(parent, val[parent], comparator, caseSensitive);
     self.queryString += ' AND ';
@@ -356,7 +350,7 @@ CriteriaProcessor.prototype._in = function _in(key, val) {
     }
     else {
       if(_.isString(value)) {
-        value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
+        value = utils.escapeString(value, self.escapeValue);
       }
 
       self.queryString += value + ',';
@@ -477,7 +471,7 @@ CriteriaProcessor.prototype.processSimple = function processSimple (tableName, p
   }
 
   if (_.isString(value)) {
-    value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
+    value = utils.escapeString(value, self.escapeValue);
   }
 
   this.queryString += parent + ' ' + combinator + ' ' + value;
@@ -574,15 +568,12 @@ CriteriaProcessor.prototype.process = function process(parent, value, combinator
 CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, value) {
   var self = this;
   var str;
-  var comparator;
+  var comparator = 'LIKE';
   var escapedDate = false;
 
   // Check value for a date type
   if(_.isDate(value)) {
     value = utils.toSqlDate(value);
-
-    value = self.escapeValue + value + self.escapeValue;
-    escapedDate = true;
   }
 
   switch(key) {
@@ -595,8 +586,8 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
         str = '< ' + '$' + this.paramCount;
       }
       else {
-        if(_.isString(value) && !escapedDate) {
-          value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
+        if(_.isString(value)) {
+          value = utils.escapeString(value, self.escapeValue);
         }
         str = '< ' + value;
       }
@@ -611,8 +602,8 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
         str = '<= ' + '$' + this.paramCount;
       }
       else {
-        if(_.isString(value) && !escapedDate) {
-          value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
+        if(_.isString(value)) {
+          value = utils.escapeString(value, self.escapeValue);
         }
         str = '<= ' + value;
       }
@@ -627,8 +618,8 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
         str = '> ' + '$' + this.paramCount;
       }
       else {
-        if(_.isString(value) && !escapedDate) {
-          value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
+        if(_.isString(value)) {
+          value = utils.escapeString(value, self.escapeValue);
         }
         str = '> ' + value;
       }
@@ -643,8 +634,8 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
         str = '>= ' + '$' + this.paramCount;
       }
       else {
-        if(_.isString(value) && !escapedDate) {
-          value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
+        if(_.isString(value)) {
+          value = utils.escapeString(value, self.escapeValue);
         }
         str = '>= ' + value;
       }
@@ -680,7 +671,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
             value.forEach(function(val) {
 
               if(_.isString(val)) {
-                val = self.escapeValue + utils.escapeString(val) + self.escapeValue;
+                val = utils.escapeString(val, self.escapeValue);
               }
 
               str += val + ',';
@@ -698,7 +689,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
           }
           else {
             if(_.isString(value)) {
-              value = self.escapeValue + utils.escapeString(value) + self.escapeValue;
+              value = utils.escapeString(value, self.escapeValue);
             }
 
             str = '<> ' + value;
@@ -711,18 +702,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
     case 'like':
 
       if(this.caseSensitive) {
-        comparator = 'ILIKE';
-
-        comparator = 'LIKE';
         value = value.toLowerCase();
-      }
-      else {
-        comparator = 'LIKE';
-      }
-
-      // Override comparator with WL Next features
-      if(hop(self.wlNext, 'caseSensitive') && self.wlNext.caseSensitive) {
-        comparator = 'LIKE';
       }
 
       if(this.parameterized) {
@@ -738,18 +718,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
     case 'contains':
 
       if(this.caseSensitive) {
-        comparator = 'ILIKE';
-
-        comparator = 'LIKE';
         value = value.toLowerCase();
-      }
-      else {
-        comparator = 'LIKE';
-      }
-
-      // Override comparator with WL Next features
-      if(hop(self.wlNext, 'caseSensitive') && self.wlNext.caseSensitive) {
-        comparator = 'LIKE';
       }
 
       if(this.parameterized) {
@@ -765,17 +734,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
     case 'startsWith':
 
       if(this.caseSensitive) {
-        comparator = 'ILIKE';
-        comparator = 'LIKE';
         value = value.toLowerCase();
-      }
-      else {
-        comparator = 'LIKE';
-      }
-
-      // Override comparator with WL Next features
-      if(hop(self.wlNext, 'caseSensitive') && self.wlNext.caseSensitive) {
-        comparator = 'LIKE';
       }
 
       if(this.parameterized) {
@@ -791,17 +750,7 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
     case 'endsWith':
 
       if(this.caseSensitive) {
-        comparator = 'ILIKE';
-        comparator = 'LIKE';
         value = value.toLowerCase();
-      }
-      else {
-        comparator = 'LIKE';
-      }
-
-      // Override comparator with WL Next features
-      if(hop(self.wlNext, 'caseSensitive') && self.wlNext.caseSensitive) {
-        comparator = 'LIKE';
       }
 
       if(this.parameterized) {
