@@ -180,6 +180,7 @@ WhereBuilder.prototype.single = function single(queryObject, options) {
 
   return {
     query: queryString,
+    selectQuery: parsedCriteria.selectQuery,
     values: values
   };
 };

@@ -59,10 +59,10 @@ utils.populationAlias = function (alias) {
  * Map Attributes
  *
  * Takes a js object and creates arrays used for parameterized
- * queries in postgres.
+ * queries.
  */
 
-utils.mapAttributes = function(data, options) {
+utils.mapAttributes = function(attr, data, options) {
   var keys = [],   // Column Names
       values = [], // Column Values
       params = [], // Param Index, ex: $1, $2
@@ -84,7 +84,17 @@ utils.mapAttributes = function(data, options) {
     var k = options.escapeCharacter + key + options.escapeCharacter;
     keys.push(k);
 
-    var value = utils.prepareValue(data[key]);
+    var value = data[key];
+    if (_.isDate(value)) {
+      if (attr) {
+        if (attr[key] === 'date') {
+          // let's get rid of time values
+          value = new Date(value.getFullYear(), value.getMonth(), value.getDate())
+        }
+      }
+    }
+
+    value = utils.prepareValue(value);
 
     if (_.isString(value)) {
       value = utils.escapeString(value, escapeValue);
@@ -107,7 +117,7 @@ utils.mapAttributes = function(data, options) {
     i++;
   });
 
-  return({ keys: keys, values: values, params: params });
+  return({keys: keys, values: values, params: params });
 };
 
 /**
@@ -177,9 +187,6 @@ utils.escapeString = function(value, escapeCharacter) {
 
 /**
  * JS Date to UTC Timestamp
- *
- * Dates should be stored in Postgres with UTC timestamps
- * and then converted to local time on the client.
  */
 
 utils.toSqlDate = function toSqlDate(date) {

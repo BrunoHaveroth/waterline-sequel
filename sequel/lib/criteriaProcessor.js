@@ -39,6 +39,7 @@ var CriteriaProcessor = module.exports = function CriteriaProcessor(currentTable
   this.currentSchema = schema[currentTable].attributes;
   this.tableScope = null;
   this.queryString = '';
+  this.selectQuery = '';
   this.values = [];
   this.paramCount = 1;
   this.parameterized = true;
@@ -127,6 +128,7 @@ CriteriaProcessor.prototype.read = function read(options) {
 
   return {
     query: this.queryString,
+    selectQuery: this.selectQuery,
     values: this.values
   };
 };
@@ -786,7 +788,7 @@ CriteriaProcessor.prototype.limit = function(options) {
  */
 
 CriteriaProcessor.prototype.skip = function(options) {
-  this.queryString += ' OFFSET ' + options;
+  this.selectQuery = this.selectQuery + 'SKIP ' + options + ' ';
 };
 
 /**

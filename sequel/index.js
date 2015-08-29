@@ -97,6 +97,11 @@ Sequel.prototype.find = function find(currentTable, queryObject) {
   this.queries[0] += ' ' + whereObject.query;
   this.values[0] = whereObject.values;
 
+  if (whereObject.selectQuery) {
+    // insert after select keyword
+    this.queries[0] = this.queries[0].slice(0, 7) + whereObject.selectQuery + this.queries[0].slice(7);
+  }
+
   /**
    * Step 3 - Build out the child query templates.
    */
@@ -106,6 +111,7 @@ Sequel.prototype.find = function find(currentTable, queryObject) {
 
   return {
     query: this.queries,
+    selectQuery: whereObject.selectQuery,
     values: this.values
   };
 
@@ -118,7 +124,7 @@ Sequel.prototype.find = function find(currentTable, queryObject) {
 Sequel.prototype.count = function count(currentTable, queryObject) {
 
   // Escape table name
-  var tableName = utils.escapeName(this.schema[currentTable].tableName, this.escapeCharacter);
+  var tableName = utils.escapeName(this.schema[currentTable].tableName || currentTable, this.escapeCharacter);
 
   // Step 1:
   // Build out the Count statements
@@ -172,12 +178,14 @@ Sequel.prototype.create = function create(currentTable, data) {
   };
 
   // Transform the Data object into arrays used in a parameterized query
-  var attributes = utils.mapAttributes(data, options);
+  var attributes = utils.mapAttributes(this.schema[currentTable].attributes, data, options);
   var columnNames = attributes.keys.join(', ');
   var paramValues = attributes.params.join(', ');
+  var tableName = utils.escapeName(this.schema[currentTable].tableName || currentTable, this.escapeCharacter);
+
 
   // Build Query
-  var query = 'INSERT INTO ' + utils.escapeName(currentTable, this.escapeCharacter) + ' (' + columnNames + ') values (' + paramValues + ')';
+  var query = 'INSERT INTO ' + tableName + ' (' + columnNames + ') values (' + paramValues + ')';
 
   if(this.canReturnValues) {
     query += ' RETURNING *';
@@ -201,11 +209,14 @@ Sequel.prototype.update = function update(currentTable, queryObject, data) {
 
   // Get the attribute identity (as opposed to the table name)
   var identity = currentTable;
+
+  var tableName = utils.escapeName(this.schema[currentTable].tableName || currentTable, this.escapeCharacter);
+
   // Create the query with the tablename aliased as the identity (in case they are different)
-  var query = 'UPDATE ' + utils.escapeName(currentTable, this.escapeCharacter) + ' AS ' + utils.escapeName(identity, this.escapeCharacter) + ' ';
+  var query = 'UPDATE ' + tableName + ' AS ' + utils.escapeName(identity, this.escapeCharacter) + ' ';
 
   // Transform the Data object into arrays used in a parameterized query
-  var attributes = utils.mapAttributes(data, options);
+  var attributes = utils.mapAttributes(this.schema[currentTable].attributes, data, options);
 
   // Update the paramCount
   var paramCount = attributes.params.length + 1;
