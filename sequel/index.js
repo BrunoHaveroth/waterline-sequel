@@ -322,3 +322,5 @@ Sequel.prototype.complexWhere = function complexWhere(currentTable, queryObject,
   var where = new WhereBuilder(this.schema, currentTable, _options);
   return where.complex(queryObject, options);
 };
+
+Sequel.utils = utils;
