@@ -46,7 +46,6 @@ var CriteriaProcessor = module.exports = function CriteriaProcessor(currentTable
   this.caseSensitive = true;
   this.escapeCharacter = '"';
   this.escapeValue = '"';
-  this.limitKeyword = 'LIMIT';
   this.wlNext = {};
 
   if(options && utils.object.hasOwnProperty(options, 'parameterized')) {
@@ -67,10 +66,6 @@ var CriteriaProcessor = module.exports = function CriteriaProcessor(currentTable
 
   if(options && utils.object.hasOwnProperty(options, 'escapeValue')) {
     this.escapeValue = options.escapeValue;
-  }
-
-  if(options && utils.object.hasOwnProperty(options, 'limitKeyword')) {
-    this.limitKeyword = options.limitKeyword;
   }
 
   if(options && utils.object.hasOwnProperty(options, 'wlNext')) {
@@ -778,8 +773,8 @@ CriteriaProcessor.prototype.prepareCriterion = function prepareCriterion(key, va
  */
 
 CriteriaProcessor.prototype.limit = function(options) {
-  if(options) {
-    this.queryString += ' ' + this.limitKeyword + ' ' + options;
+  if (options) {
+    this.selectQuery = this.selectQuery + 'FIRST ' + options + ' ';
   }
 };
 
@@ -788,7 +783,9 @@ CriteriaProcessor.prototype.limit = function(options) {
  */
 
 CriteriaProcessor.prototype.skip = function(options) {
-  this.selectQuery = this.selectQuery + 'SKIP ' + options + ' ';
+  if (options) {
+    this.selectQuery = this.selectQuery + 'SKIP ' + options + ' ';
+  }
 };
 
 /**

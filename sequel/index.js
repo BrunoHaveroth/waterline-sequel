@@ -51,7 +51,6 @@ var Sequel = module.exports = function(schema, options) {
   this.declareDeleteAlias = options && utils.object.hasOwnProperty(options, 'declareDeleteAlias') ? options.declareDeleteAlias : true;
 
   this.escapeValue = options && utils.object.hasOwnProperty(options, 'escapeValue') ? options.escapeValue : '"';
-  this.limitKeyword = options && utils.object.hasOwnProperty(options, 'limitKeyword') ? options.limitKeyword : 'LIMIT';
 
   // Waterline NEXT
   // These are flags that can be toggled today and expose future features. If any of the following are turned
@@ -305,7 +304,6 @@ Sequel.prototype.simpleWhere = function simpleWhere(currentTable, queryObject, o
     caseSensitive: this.caseSensitive,
     escapeCharacter: this.escapeCharacter,
     escapeValue: this.escapeValue,
-    limitKeyword: this.limitKeyword,
     wlNext: this.wlNext
   };
 
@@ -318,7 +316,6 @@ Sequel.prototype.complexWhere = function complexWhere(currentTable, queryObject,
     parameterized: this.parameterized,
     caseSensitive: this.caseSensitive,
     escapeValue: this.escapeValue,
-    limitKeyword: this.limitKeyword,
     escapeCharacter: this.escapeCharacter
   };
 
