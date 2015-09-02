@@ -248,7 +248,7 @@ WhereBuilder.prototype.complex = function complex(queryObject, options) {
         queryString += parsedCriteria.query;
       }
 
-      queryString = 'SELECT * FROM (' + queryString + ') AS ' + utils.escapeName(populationAlias, self.escapeCharacter)
+      queryString = 'SELECT * FROM (' + queryString + ') AS ' + utils.escapeName(stage2ChildAlias, self.escapeCharacter)
 
       // Add to the query list
       queries.push({
