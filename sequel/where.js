@@ -237,7 +237,7 @@ WhereBuilder.prototype.complex = function complex(queryObject, options) {
       // Read the queryObject and get back a query string and params
       parsedCriteria = criteriaParser.read(population.criteria);
 
-      queryString = 'SELECT ' + parsedCriteria.selectQuery + '* FROM ' + utils.escapeName(population.child, self.escapeCharacter) + ' AS ' + utils.escapeName(populationAlias, self.escapeCharacter) + ' WHERE ' + utils.escapeName(population.childKey, self.escapeCharacter) + ' = ^?^ ';
+      queryString = 'SELECT' + parsedCriteria.selectQuery + '* FROM ' + utils.escapeName(population.child, self.escapeCharacter) + ' AS ' + utils.escapeName(populationAlias, self.escapeCharacter) + ' WHERE ' + utils.escapeName(population.childKey, self.escapeCharacter) + ' = ^?^ ';
       if(parsedCriteria) {
 
         // If where criteria was used append an AND clause
@@ -248,7 +248,7 @@ WhereBuilder.prototype.complex = function complex(queryObject, options) {
         queryString += parsedCriteria.query;
       }
 
-      queryString = 'SELECT * FROM (' + queryString + ') AS ' + utils.escapeName(stage2ChildAlias, self.escapeCharacter)
+      queryString = 'SELECT * FROM (' + queryString + ') AS ' + utils.escapeName(populationAlias, self.escapeCharacter)
 
       // Add to the query list
       queries.push({
@@ -304,7 +304,7 @@ WhereBuilder.prototype.complex = function complex(queryObject, options) {
         selectKeys.push({ table: stage2.child, key: schema.columnName || key });
       });
 
-      queryString += 'SELECT ' + parsedCriteria.selectQuery;
+      queryString += 'SELECT ' + parsedCriteria;
       selectKeys.forEach(function(projection) {
         var projectionAlias = _.find(_.values(self.schema), {tableName: projection.table}).tableName;
         queryString += utils.escapeName(projectionAlias, self.escapeCharacter) + '.' + utils.escapeName(projection.key, self.escapeCharacter) + ',';
@@ -327,6 +327,8 @@ WhereBuilder.prototype.complex = function complex(queryObject, options) {
 
         queryString += parsedCriteria.query;
       }
+
+      queryString = 'SELECT * FROM (' + queryString + ') AS ' + utils.escapeName(stage2ChildAlias, self.escapeCharacter)
 
       // Add to the query list
       queries.push({
