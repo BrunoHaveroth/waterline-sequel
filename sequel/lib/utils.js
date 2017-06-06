@@ -56,7 +56,7 @@ utils.escapeName = function escapeName(name, escapeCharacter) {
  */
 
 utils.populationAlias = function (alias) {
-  return '__' + alias;
+  return 'n_' + alias;
 };
 
 /**
