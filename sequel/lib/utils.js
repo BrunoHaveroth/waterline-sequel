@@ -90,7 +90,7 @@ utils.mapAttributes = function(attr, data, options) {
 
     var value = data[key];
     if (_.isDate(value)) {
-      if (attr) {
+      if (attr && attr[key]) {
         if (attr[key] === 'date' || attr[key].type === 'date') {
           // let's get rid of time values
           value = new Date(value.getFullYear(), value.getMonth(), value.getDate())
